@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" href="pug2.jfif" type="image/x-icon">
+    <link rel="stylesheet" href="../static/createUser.css" th:href="'/createUser.css'">
+</head>
+<body>
+
+
+<tr>
+    <td align="center"><h1>Sign up</h1><td>
+</tr>
+
+<form action="/createUser" th:object="${user}" method="POST">
+
+    <p>* optional to fill in</p>
+
+    <table>
+        <tr>
+            <td align="center">First Name:</td>
+            <td align="center"><input type="text" th:field="*{ownerName}" th:errorclass="invalid" /></td>
+        </tr>
+
+        <tr>
+            <td align="center">Last name:</td>
+            <td align="center"><input type="text" th:field="*{ownerLastName}" th:errorclass="invalid"/></td>
+        </tr>
+
+        <tr>
+            <td align="center">Email address:</td>
+            <td align="center"><input type="text" th:field="*{email}" th:errorclass="invalid"/></td>
+        </tr>
+
+        <tr>
+            <td align="center">Phone number:</td>
+            <td align="center"><input type="text" th:field="*{phoneNumber}" th:errorclass="invalid"/></td>
+        </tr>
+
+        <tr>
+            <td align="center">Dog name: </td>
+            <td align="center"><input type="text" th:field="*{dogName}" th:errorclass="invalid"/></td>
+        </tr>
+
+        <tr>
+            <td align="center">* Dog Breed: </td>
+            <td align="center"><input type="text" th:field="*{dogBreed}" /></td>
+        </tr>
+
+        <tr>
+
+            <td align="center"><p>Dog Weight in kilo:</p></td>
+            <td align="center"><select>
+                <option>0-10</option>
+                <option>10-20</option>
+                <option>20+</option>
+
+            </select></td>
+        </tr>
+
+        <tr>
+            <td align="center">* Special Needs:</td>
+            <td align="center"> <input type="text" th:field="*{specialNeeds}" /></td>
+        </tr>
+
+        <tr>
+            <td align="center">Password: </td>
+            <td align="center"><input type="password" th:field="*{password}" /></td>
+        </tr>
+
+        <tr>
+            <td align="center"> <input type="submit" value="Save User"></td>
+        </tr>
+
+
+
+    </table>
+    <p th:if="${#fields.hasErrors('ownerName')}">Please enter your first name.</p>
+    <p th:if="${#fields.hasErrors('ownerLastName')}">Please enter your last name.</p>
+    <p th:if="${#fields.hasErrors('email')}">Please enter a valid email.</p>
+    <p th:if="${#fields.hasErrors('phoneNumber')}">Please enter a phone number.</p>
+    <p th:if="${#fields.hasErrors('dogName')}">Please enter the name of your dog.</p>
+
+
+
+</form>
+</body>
+</html>

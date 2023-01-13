@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" href="pug2.jfif" type="image/x-icon">
+    <link rel="stylesheet" href="../static/editProfile.css" th:href="'/editProfile.css'">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+        <a href="/" class="navbar-brand"><img style="height: 75px;" src="DogsInnLogo.png" alt=""/></a>
+        <button class="navbar-toggler" data-bs-toggle="collapse"
+                data-bs-target="#nav" aria-controls="nav" aria-label="Expand
+            Navigation"><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+            <ul class="navbar-nav">
+                <li>
+                    <a href="/" class="nav-link active">Startsida</a>
+                </li>
+                <li>
+                    <a href="/myProfile" class="nav-link active">Min profil</a>
+                </li>
+                <li>
+                    <a href="/logout" class="nav-link active">Logga ut</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/login" class="nav-link disabled text-light" th:text="${session.ownerName}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="d-flex justify-content-around" style="margin-top: 5%;margin-block-end: auto;">
+
+<div class="card">
+    <div class="card-header">
+        <h1 class="h12" style="text-align: center";>Ändra profil</h1>
+    </div>
+    <div class="card">
+    <div class="card-body">
+
+        <form action="/editMyProfile" th:object="${user}" method="POST">
+            <input type="hidden" th:field="*{email}">
+            <!--  denna hidden måste vara med, för det är den som sparar användaren-->
+            <p>* Valfritt att fylla i</p>
+
+            <table>
+                <tr>
+                    <td align="center">Förnamn:</td>
+                    <td align="center"><input type="text" th:field="*{ownerName}" th:errorclass="invalid"/></td>
+                </tr>
+                <tr>
+                    <td align="center">Efternamn:</td>
+                    <td align="center"><input type="text" th:field="*{ownerLastName}" th:errorclass="invalid"/></td>
+                </tr>
+
+                <tr>
+                    <td align="center">Telefonnummer:</td>
+                    <td align="center"><input type="text" th:field="*{phoneNumber}" th:errorclass="invalid"/></td>
+                </tr>
+
+                <tr>
+                    <td align="center">Hundens namn:</td>
+                    <td align="center"><input type="text" th:field="*{dogName}" th:errorclass="invalid"/></td>
+                </tr>
+
+                <tr>
+                    <td align="center">* Hundens ras:</td>
+                    <td align="center"><input type="text" th:field="*{dogBreed}"/></td>
+                </tr>
+
+                <tr>
+                    <td align="center">Lösenord:</td>
+                    <td align="center"><input type="text" th:field="*{password}"/></td>
+                </tr>
+
+                <tr>
+
+                    <td align="center"><p>Hundens vikt(kg):</p></td>
+                    <td align="center"><select>
+                        <option>0-10</option>
+                        <option>10-20</option>
+                        <option>20+</option>
+
+                    </select></td>
+                </tr>
+
+                <tr>
+                    <td align="center">* Övrigt:</td>
+                    <td align="center"><input type="text" th:field="*{specialNeeds}"/></td>
+                </tr>
+
+
+            </table>
+            <p th:if="${#fields.hasErrors('ownerName')}">Vänligen knappa in förnamn.</p>
+            <p th:if="${#fields.hasErrors('ownerLastName')}">Vänligen knappa in efternamn.</p>
+            <p th:if="${#fields.hasErrors('phoneNumber')}">Vänligen knappa in telefonnummer.</p>
+            <p th:if="${#fields.hasErrors('dogName')}">Vänligen knappa in hundens namn.</p>
+            <p th:if="${#fields.hasErrors('password')}">Vänligen knappa in lösenord.</p>
+
+            <div style="margin-top: 17px;">
+                <button onclick="location.href = '/myProfile';" class="noselect">Spara ändringarna</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>
