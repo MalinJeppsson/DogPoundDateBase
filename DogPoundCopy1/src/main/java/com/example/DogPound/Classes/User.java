@@ -1,15 +1,13 @@
-package com.example.DogPound;
+package com.example.DogPound.Classes;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.springframework.format.annotation.NumberFormat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "Accounts")
@@ -49,10 +47,8 @@ public class User {
     @Column(name="SPECIAL_NEEDS")
     private String specialNeeds;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="ID")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Booking> bookings = new ArrayList<>();
-
 
 
 

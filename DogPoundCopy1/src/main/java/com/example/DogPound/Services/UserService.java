@@ -1,9 +1,11 @@
-package com.example.DogPound;
+package com.example.DogPound.Services;
 
+import com.example.DogPound.Classes.Booking;
+import com.example.DogPound.Classes.User;
+import com.example.DogPound.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -69,4 +71,5 @@ public class UserService {
 
         return user;
     }
+
 }

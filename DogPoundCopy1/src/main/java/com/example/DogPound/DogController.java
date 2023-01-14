@@ -1,19 +1,21 @@
 package com.example.DogPound;
 
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
+import com.example.DogPound.Classes.Day;
+import com.example.DogPound.Classes.User;
+import com.example.DogPound.Classes.Week;
+import com.example.DogPound.Services.BookingService;
+import com.example.DogPound.Services.DayService;
+import com.example.DogPound.Services.UserService;
+import com.example.DogPound.Services.WeekService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.client.RestTemplate;
 
-import javax.xml.validation.Validator;
-import java.util.*;
+import java.util.List;
 
 @Controller
 public class DogController {
@@ -21,6 +23,11 @@ public class DogController {
     UserService userService;
     @Autowired
     BookingService bookingService;
+    @Autowired
+    WeekService weekService;
+    @Autowired
+    DayService dayService;
+
     @GetMapping("/")
     String mainPage(Model model, HttpSession session) {
         if (session.getAttribute("ownerName") == null) {
@@ -46,6 +53,7 @@ public class DogController {
         session.setAttribute("ownerName", createdUser.getOwnerName());
         session.setAttribute("email", createdUser.getEmail());
         session.setAttribute("bookingString", createdUser.getBookings());
+        session.setAttribute("userId", createdUser.getId());
 
         return "myProfile";
 
@@ -59,10 +67,12 @@ public class DogController {
     @PostMapping("/login")
     String login(HttpSession session, @RequestParam String email, @RequestParam String password) {
         User user = userService.findUserByEmailAndByPassword(email, password);
+        List<String> bookingString = bookingService.convertBookingsToStringList(user);
         if(user != null){
             session.setAttribute("ownerName", user.getOwnerName());
             session.setAttribute("email", email);
-            session.setAttribute("bookingString", user.getBookings());
+            session.setAttribute("bookingString", bookingString);
+            session.setAttribute("userId", user.getId());
             return "myProfile";
         }
 
@@ -110,7 +120,25 @@ public class DogController {
     @GetMapping("/booking")
     String booking () {
 
-        return "timeSlots";
+        return "selectWeek";
+    }
+    @PostMapping("/booking")
+    String bookingConfirmed(@RequestParam String selectedWeek, @RequestParam String selectedDay, Model model, HttpSession session) {
+        Week week = weekService.createNewWeekOrReturnIfAlreadyExists(selectedWeek);
+        Day day = dayService.createNewDayAndAddToWeekAndRepo(selectedDay, week);
+        User user = userService.getUser((Long)(session.getAttribute("userId")));
+        bookingService.addBooking(user,day);
+        List<String> bookingString = bookingService.convertBookingsToStringList(user);
+        session.setAttribute("bookingString", bookingString);
+
+
+//        Week week = weekService.returnSpecificWeek(selectedWeek);
+//        List<Day> days = week.getWeekDays();
+//        model.addAttribute("selectedWeek", selectedWeek); //string
+//        model.addAttribute("days", days);
+//        model.addAttribute("week",week);
+//        session.setAttribute("week", week);
+        return "myProfile";
     }
 
     private void validate(User user, BindingResult bindingResult){
