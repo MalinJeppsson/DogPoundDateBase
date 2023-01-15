@@ -41,12 +41,9 @@ public class Week {
     private Calendar generateWeekStartDate(String weekNum) {
         Calendar mondayDate = Calendar.getInstance();
         mondayDate.set(2023,01,06);
-        System.out.println("after setting it " + mondayDate.getTime());
         if (weekNum.equals("6")) {
-            System.out.println("first if " + mondayDate.getTime());
             return mondayDate;
         } else {
-            System.out.println(mondayDate.getTime());
             mondayDate.add(Calendar.WEEK_OF_YEAR, Integer.valueOf(weekNum) - 6);
             return mondayDate;
         }
