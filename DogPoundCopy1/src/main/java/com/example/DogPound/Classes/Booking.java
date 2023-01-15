@@ -2,27 +2,44 @@ package com.example.DogPound.Classes;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
-@Table(name="BOOKINGS")
 @Entity
+@Table(name="BOOKINGS")
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="DAY_NAME")
+    private String dayName;
+
+    @ManyToOne
+    private Week week;
+
+//    @OneToMany (mappedBy = "day", cascade = CascadeType.ALL)
+//    private List<BookingOld> bookings;
+
     @ManyToOne
     private User user;
 
-    @ManyToOne
-    private Day day;
+    @Column(name="DATE")
+    private String date;
 
-    public Booking(User user, Day day) {
-        this.user = user;
-        this.day = day;
+
+
+
+    public Booking(String name) {
+        this.dayName = name;
     }
 
     public Booking() {
+    }
+
+
+    public Booking(String name, Week week, User user, String date) {
+        this.dayName = name;
+        this.week = week;
+        this.user = user;
+        this.date= date;
     }
 
     public Long getId() {
@@ -33,6 +50,10 @@ public class Booking {
         this.id = id;
     }
 
+    public void setDayName(String dayName) {
+        this.dayName = dayName;
+    }
+
     public User getUser() {
         return user;
     }
@@ -41,11 +62,41 @@ public class Booking {
         this.user = user;
     }
 
-    public Day getDay() {
-        return day;
+    public String getDate() {
+        return date;
     }
 
-    public void setDay(Day day) {
-        this.day = day;
+    public void setDate(String date) {
+        this.date = date;
     }
+
+    public String getDayName() {
+        return dayName;
+    }
+
+    public Week getWeek() {
+        return week;
+    }
+
+    public void setWeek(Week week) {
+        this.week = week;
+    }
+
+    //    public int getSpots() {
+//        return spots;
+//    }
+//
+//    public void setSpots(int spots) {
+//        this.spots = spots;
+//    }
+//    public void removeOneSpot() {
+//        if (spots > 0) {
+//            spots--;
+//        }
+//    }
+//    public void addOneSpot() {
+//        if (spots < 10) {
+//            spots++;
+//        }
+//    }
 }

@@ -2,10 +2,16 @@ package com.example.DogPound.Classes;
 
 import jakarta.persistence.*;
 
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
+
 @Entity
+@Table(name="WEEKS")
 public class Week {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,7 +19,10 @@ public class Week {
     @Column(name = "WEEK_NAME")
     private String name;
     @OneToMany (mappedBy = "week", cascade = CascadeType.ALL)
-    private List<Day> weekDays;
+    private List<Booking> weekDays;
+
+    @Column
+    private Calendar mondayDate;
 
 //    public Week(String name) {
 //        this.name = name;
@@ -26,9 +35,32 @@ public class Week {
     public Week(String name) {
         this.name = name;
         this.weekDays=new ArrayList<>();
+        this.mondayDate =generateWeekStartDate(name);
     }
 
-    public Week(String name, List<Day> weekDays) {
+    private Calendar generateWeekStartDate(String weekNum) {
+        Calendar mondayDate = Calendar.getInstance();
+        mondayDate.set(2023,01,06);
+        System.out.println("after setting it " + mondayDate.getTime());
+        if (weekNum.equals("6")) {
+            System.out.println("first if " + mondayDate.getTime());
+            return mondayDate;
+        } else {
+            System.out.println(mondayDate.getTime());
+            mondayDate.add(Calendar.WEEK_OF_YEAR, Integer.valueOf(weekNum) - 6);
+            return mondayDate;
+        }
+    }
+
+    public Calendar getMondayDate() {
+        return mondayDate;
+    }
+
+    public void setMondayDate(Calendar mondayDate) {
+        this.mondayDate = mondayDate;
+    }
+
+    public Week(String name, List<Booking> weekDays) {
         this.name = name;
         this.weekDays = weekDays;
     }
@@ -49,11 +81,11 @@ public class Week {
         this.name = name;
     }
 
-    public List<Day> getWeekDays() {
+    public List<Booking> getWeekDays() {
         return weekDays;
     }
 
-    public void setWeekDays(List<Day> weekDays) {
+    public void setWeekDays(List<Booking> weekDays) {
         this.weekDays = weekDays;
     }
 

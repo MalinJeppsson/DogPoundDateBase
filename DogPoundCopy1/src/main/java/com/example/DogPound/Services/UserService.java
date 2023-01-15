@@ -6,6 +6,7 @@ import com.example.DogPound.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -70,6 +71,18 @@ public class UserService {
                 .orElse(null);
 
         return user;
+    }
+
+    public List<String> convertBookingsToStringList(User user) {
+        List<String> returnList = new ArrayList<>();
+        List<Booking> userBookings = user.getBookings();
+        for (int i = 0; i < userBookings.size(); i++) {
+            // Loops through bookings, gets its Day object and checks its name. Returns string like "Tisdag" etc. Add strings like "Vecka 44" to returnList
+            String dayName = userBookings.get(i).getDayName();
+            String date = userBookings.get(i).getDate();
+            returnList.add(dayName + ", Vecka " + userBookings.get(i).getWeek().getName()+ ", " + date);
+        }
+        return returnList;
     }
 
 }

@@ -1,10 +1,9 @@
 package com.example.DogPound;
 
-import com.example.DogPound.Classes.Day;
+import com.example.DogPound.Classes.Booking;
 import com.example.DogPound.Classes.User;
 import com.example.DogPound.Classes.Week;
 import com.example.DogPound.Services.BookingService;
-import com.example.DogPound.Services.DayService;
 import com.example.DogPound.Services.UserService;
 import com.example.DogPound.Services.WeekService;
 import jakarta.servlet.http.HttpSession;
@@ -22,11 +21,9 @@ public class DogController {
     @Autowired
     UserService userService;
     @Autowired
-    BookingService bookingService;
-    @Autowired
     WeekService weekService;
     @Autowired
-    DayService dayService;
+    BookingService bookingService;
 
     @GetMapping("/")
     String mainPage(Model model, HttpSession session) {
@@ -67,7 +64,7 @@ public class DogController {
     @PostMapping("/login")
     String login(HttpSession session, @RequestParam String email, @RequestParam String password) {
         User user = userService.findUserByEmailAndByPassword(email, password);
-        List<String> bookingString = bookingService.convertBookingsToStringList(user);
+        List<String> bookingString = userService.convertBookingsToStringList(user);
         if(user != null){
             session.setAttribute("ownerName", user.getOwnerName());
             session.setAttribute("email", email);
@@ -125,10 +122,9 @@ public class DogController {
     @PostMapping("/booking")
     String bookingConfirmed(@RequestParam String selectedWeek, @RequestParam String selectedDay, Model model, HttpSession session) {
         Week week = weekService.createNewWeekOrReturnIfAlreadyExists(selectedWeek);
-        Day day = dayService.createNewDayAndAddToWeekAndRepo(selectedDay, week);
         User user = userService.getUser((Long)(session.getAttribute("userId")));
-        bookingService.addBooking(user,day);
-        List<String> bookingString = bookingService.convertBookingsToStringList(user);
+        Booking booking = bookingService.createNewBooking(selectedDay, week, user);
+        List<String> bookingString = userService.convertBookingsToStringList(user);
         session.setAttribute("bookingString", bookingString);
 
 
