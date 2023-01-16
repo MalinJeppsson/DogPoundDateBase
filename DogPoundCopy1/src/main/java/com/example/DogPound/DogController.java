@@ -64,8 +64,9 @@ public class DogController {
     @PostMapping("/login")
     String login(HttpSession session, @RequestParam String email, @RequestParam String password) {
         User user = userService.findUserByEmailAndByPassword(email, password);
-        List<String> bookingString = userService.convertBookingsToStringList(user);
+
         if(user != null){
+            List<String> bookingString = userService.convertBookingsToStringList(user);
             session.setAttribute("ownerName", user.getOwnerName());
             session.setAttribute("email", email);
             session.setAttribute("bookingString", bookingString);
